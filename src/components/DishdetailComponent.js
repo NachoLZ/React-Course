@@ -57,8 +57,8 @@ import { Link } from 'react-router-dom';
                 author: ''
             };
     
-            if (this.state.touched.author && author.length < 2)
-                errors.author = 'Must be greater than 2 characters.';
+            if (this.state.touched.author && author.length < 3)
+                errors.author = 'Must be greater than 3 characters.';
             else if (this.state.touched.author && author.length > 15)
                 errors.author = 'Must be 15 characters or less';
             
