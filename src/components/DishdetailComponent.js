@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Loading } from './LoadingComponent';
 import { baseUrl } from '../shared/baseUrl';
 import { Control } from 'react-redux-form';
-import { FadeTransform, Fade, Stagger } from 'react-animation-components';
+import { FadeTransform } from 'react-animation-components';
 
 
 
