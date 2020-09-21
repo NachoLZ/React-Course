@@ -2,6 +2,11 @@ import React, { Component } from 'react';
 import { Card, CardImg, CardText , CardBody, CardTitle, Breadcrumb, BreadcrumbItem, Form, FormGroup, Input, Modal, ModalHeader, ModalBody, Label, Col, Button, FormFeedback } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { Loading } from './LoadingComponent';
+import { baseUrl } from '../shared/baseUrl';
+import { Control } from 'react-redux-form';
+import { FadeTransform, Fade, Stagger } from 'react-animation-components';
+
+
 
     class CommentForm extends Component {
 
@@ -42,7 +47,7 @@ import { Loading } from './LoadingComponent';
     
         handleSubmit(values){
             this.toggleModal();
-            this.props.addComment(this.props.dishId, values.rating, values.author, values.comment)
+            this.props.postComment(this.props.dishId, values.rating, values.author, values.comment);
         }
 
         handleBlur = (field) => (evt) => {
@@ -88,8 +93,7 @@ import { Loading } from './LoadingComponent';
                             </FormGroup>
                             <FormGroup>
                                 <Label htmlFor="author">Your Name</Label>
-                                <Input type ="text" id="author" name="author" innerRef={(input) => this.author = input} onBlur={this.handleBlur('author')}
-                                        onChange={this.handleInputChange} valid={errors.author === ''}
+                                <Control.text model=".author" id="author" name="author" placeholder="Your Name" className="form-control" className="form-control" onChange={this.handleInputChange} valid={errors.author === ''}
                                         invalid={errors.author !== ''}/>
                                 <FormFeedback>{errors.author}</FormFeedback>
                             </FormGroup>
@@ -114,18 +118,22 @@ import { Loading } from './LoadingComponent';
     function RenderDish({dish}) {
 
             return(
-                <Card>
-                    <CardImg width='100%' object src={dish.image} alt={dish.name} />
-                    <CardBody>
-                        <CardTitle>{dish.name}</CardTitle>
-                        <CardText>{dish.description}</CardText>
-                    </CardBody>
-                </Card>
+
+                <FadeTransform in transformProps={{exitTransform: 'scale(0.5) translateY(-50%)'}}>
+                    <Card>
+                        <CardImg top src={baseUrl + dish.image} alt={dish.name} />
+                        <CardBody>
+                            <CardTitle>{dish.name}</CardTitle>
+                            <CardText>{dish.description}</CardText>
+                        </CardBody>
+                    </Card>
+                </FadeTransform>
+
             );
         
     }
 
-    function RenderComments({comments, addComment, dishId}){
+    function RenderComments({comments, postComment, dishId}){
             const comm = comments.map((c) => { 
                 let date = new Date( Date.parse(c.date) );
                 const year = date.getFullYear();
@@ -159,7 +167,7 @@ import { Loading } from './LoadingComponent';
                         <CardBody>
                             <CardText>{comm}</CardText>
                         </CardBody>
-                        <CommentForm dishId={dishId} addComment={addComment} /> 
+                        <CommentForm dishId={dishId} postComment={postComment} /> 
                 </Card>
             );   
  
@@ -206,7 +214,7 @@ import { Loading } from './LoadingComponent';
                     <div className="container" className="col-12 col-md-5 m-1">
                         <RenderDish dish={props.dish} />
                         <RenderComments comments={props.comments}
-                        addComment={props.addComment}
+                        postComment={props.postComment}
                         dishId={props.dish.id} />
                     </div>
                 </div>    
